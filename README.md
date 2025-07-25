@@ -51,25 +51,19 @@ Whether on low-end devices or unstable networks, *Smart E-Passbook* ensures that
 
 ## ✨ Features
 
-- ✅ **Seamless Offline Access**  
+- **Seamless Offline Access**  
   Smart caching and IndexedDB storage allow the app to work even with low or no internet connectivity.
-
-- ✅ **Secure Biometric & Email Authentication**  
+- **Secure Biometric & Email Authentication**  
   Only pilot users with valid email credentials and biometric authentication can access the system securely.
-
-- ✅ **Encrypted Data Transactions**  
+- **Encrypted Data Transactions**  
   All transaction data is protected with AES encryption, ensuring confidentiality and data integrity.
-
-- ✅ **Cross-Platform PWA Support**  
+- **Cross-Platform PWA Support**  
   Installable and functional on any device—mobile, desktop, or tablet—just like a native app.
-
-- ✅ **Bank Infrastructure Optimization**  
+- **Bank Infrastructure Optimization**  
   Reduces server load and banking infrastructure cost using lazy loading techniques and local data handling.
-
-- ✅ **Secure Bank Account Linking**  
+- **Secure Bank Account Linking**  
   Ensures only valid IFSC codes, account numbers, and real names are accepted during bank linking.
-
-- ✅ **Low-End Device Friendly**  
+- **Low-End Device Friendly**  
   Designed to be lightweight, fast, and accessible—even on entry-level smartphones.
 
 
