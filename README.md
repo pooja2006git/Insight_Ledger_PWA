@@ -139,3 +139,32 @@ Simulating offline behavior in dev environments was tricky. We had to:
 
 > These challenges helped us dive deeper into the **intersection of frontend performance, encryption, storage, and UX resilience**—and shaped the final architecture of Insight Ledger.
 
+## 🤝 Contributing
+
+We welcome meaningful contributions to enhance security, performance, and offline-first functionality. Whether you're improving AI suggestions or refining PWA behavior, your efforts matter.
+
+This system is also designed for integration with open APIs and sector-level platforms to support scalable, real-world adoption and collaborative innovation.
+
+## 🚀 Deployment
+
+The *Insight Ledger* system is built using a modern and efficient tech stack to ensure secure, scalable, and offline-capable functionality.
+
+### 🛠 Technologies Used:
+- *Frontend:* React (with Vite) for fast rendering and smooth user experience
+- *Backend:* Django REST Framework for secure API development
+- *Database:* SQLite (lightweight and suitable for local development)
+- *Security:* AES Encryption for all sensitive data
+- *Local Storage:* IndexedDB for offline caching
+- *Cross-Platform:* Built as a *Progressive Web App (PWA)* to support installation on mobile, desktop, and tablets
+
+### 🌐 Hosting & Deployment:
+- The project is currently *hosted locally* and tested successfully on different devices and browsers.
+- The PWA works even in *offline mode* after a single successful login using smart caching.
+- Lazy loading and optimized data fetching ensure reduced server costs and enhanced performance.
+
+### 📽 Live Prototype Demo:
+> For a detailed walkthrough of the working model and how it runs locally with offline access,  
+> 📺 *Check out the YouTube video here:*  
+👉 [Demo: Insight Ledger - Secure Offline PWA](https://your-youtube-link-here.com) (Replace with your actual link)
+
+
