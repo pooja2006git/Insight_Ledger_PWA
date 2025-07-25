@@ -63,5 +63,43 @@ Whether on low-end devices or unstable networks, *Smart E-Passbook* ensures that
   > Reduces server load and banking infrastructure cost using lazy loading techniques and local data handling.
 
 
+## 🔧 How It Works
+
+<img width="1920" height="1080" alt="work" src="https://github.com/user-attachments/assets/a0b51ac9-a60b-4969-9e1e-e22b3cb3f4a7" />
+
+
+The **Insight Ledger** system follows a streamlined, secure workflow from login to transaction management:
+
+1. **User Authentication**
+   - Users log in using a registered email address and password.
+   - Biometric authentication (if enabled on the device) adds an extra layer of security.
+   - Only valid email formats (e.g., `name@domain.com`) and strong passwords are accepted.
+   
+2. **Bank Account Linking**
+   - Users link their bank account securely by entering:
+     -  Valid account number (numeric only)
+     -  IFSC code (alphanumeric, uppercase only)
+     -  Real name (validated)
+   - The data is encrypted using **AES encryption** before being stored or transmitted.
+
+3. **Data Storage and Caching**
+   - Upon first successful login, transaction data is fetched from the server.
+   - Data is stored locally in **IndexedDB** using smart caching strategies for offline access.
+
+4. **Transaction Visualization**
+   - Transactions are displayed with dynamic icons and color-coded indicators (green for income, red for expense).
+   - Users can view timestamps, categories, and transaction amounts.
+
+5. **Offline Mode Support**
+   - Users can manually toggle between **Online** and **Offline** modes via a dedicated button.
+   - When offline, the app loads data from local cache (IndexedDB) and functions seamlessly.
+
+7. **Security at Every Step**
+   - Authentication is handled via *token-based login*, ensuring secure session management.
+   - All requests and data exchanges are protected using *end-to-end HTTP encryption (HTTPS)*.
+   
+8. **Cross-Platform and Lightweight**
+   - Built as a **Progressive Web App (PWA)**, ensuring native-like performance on web, mobile, and tablets.
+   - Optimized using **lazy loading** to reduce server load and ensure fast load times on low-end devices.
 
 
