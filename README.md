@@ -112,32 +112,32 @@ The **Insight Ledger** system follows a streamlined, secure workflow from login 
 |-------------------|------------------|
 | ![WhatsApp Image 2025-07-25 at 12 10 33 PM](https://github.com/user-attachments/assets/8029747e-d273-4a81-92ae-c357e4f601ba)|![WhatsApp Image 2025-07-25 at 10 19 25 AM](https://github.com/user-attachments/assets/d57e84e1-1cd5-4b79-a0d8-45ba959cb3e3)
 
-## 🚧 Challenges Faced
+## Challenges Faced
 
-Building a semi-offline, encrypted financial app in a short hackathon window came with unique challenges:
+Building a semi-offline, encrypted financial app within a short hackathon window came with unique technical and architectural hurdles:
 
-- **In-Browser AES-256 Encryption**
- -Encrypting transaction data client-side using AES-256 without compromising performance or breaking reactivity was a delicate balance. We had to ensure that encryption occurred **before any data was stored** while keeping it **asynchronous and non-blocking** for the UI.
+- **In-Browser AES-256 Encryption**  
+  Encrypting transaction data client-side using AES-256 without compromising performance or reactivity was a delicate balance. We ensured encryption occurred *before any data was stored*, while keeping it *asynchronous and non-blocking* for the UI.
 
-- **Working with IndexedDB**
- -Unlike localStorage, **IndexedDB is asynchronous and schema-driven**, making it powerful but unintuitive. Managing versioning, handling upgrades gracefully, and ensuring reliable read/write operations across sessions required careful abstraction and fallback handling.
+- **Working with IndexedDB**  
+  Unlike localStorage, IndexedDB is asynchronous and schema-driven—powerful, yet unintuitive. We had to manage versioning, handle upgrades gracefully, and ensure reliable read/write operations across sessions with careful abstraction and fallback logic.
 
-- **Sync Strategy and Offline Behavior**
- - Designing a **"semi-offline" flow** was nuanced. We needed to:
-  - Detect first-time vs returning users.
-  - Trigger secure sync only when needed.
-  - Gracefully fall back to offline mode without confusing the user.
+- **Sync Strategy and Offline Behavior**  
+  Designing a "semi-offline" flow involved multiple layers of decision-making:
+  - Detecting first-time vs returning users
+  - Triggering secure sync only when necessary
+  - Gracefully falling back to offline mode without disrupting user experience
 
-- **State Persistence and Data Binding**
- -React state doesn’t persist across reloads. We had to engineer a system where **stored data in IndexedDB could hydrate the UI seamlessly** on relaunch—without reauthentication, and with encryption intact.
+- **State Persistence and Data Binding**  
+  React state doesn’t persist across reloads. We engineered a system where stored data in IndexedDB could hydrate the UI on relaunch—without requiring reauthentication, and with encryption intact.
 
-- **Testing Offline UX**
- - Simulating offline behavior in dev environments was tricky. We had to:
-  - Emulate no-network conditions.
-  - Validate IndexedDB fallback across browsers.
-  - Ensure users always had access to a functional UI regardless of network status.
+- **Testing Offline UX**  
+  Simulating offline behavior in development was a challenge:
+  - We emulated no-network conditions
+  - Validated IndexedDB fallback across browsers
+  - Ensured that users always had access to a functional UI regardless of connectivity
 
-> These challenges helped us dive deeper into the **intersection of frontend performance, encryption, storage, and UX resilience**—and shaped the final architecture of Insight Ledger.
+> These challenges deepened our understanding of the intersection between frontend performance, cryptographic security, offline storage, and resilient UX—and directly shaped the architecture of **Insight Ledger**.
 
 ## 🤝 Contributing
 
