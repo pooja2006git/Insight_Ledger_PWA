@@ -9,3 +9,17 @@
 Leveraging *Progressive Web App (PWA)* capabilities, the app ensures smooth cross-platform performance. By using *lazy loading techniques, it significantly **reduces server load* and supports *infrastructure cost optimization* for banks.
 
 Whether on low-end devices or unstable networks, *Smart E-Passbook* ensures that users enjoy a consistent and secure digital banking experience.
+
+## 📚 Table of Contents
+
+- [📝 Project Description](#-project-description)
+- [🔍 Overview](#-overview)
+- [✨ Features](#-features)
+- [⚙ How It Works](#-how-it-works)
+- [🧱 Architecture & Design](#-architecture--design)
+- [🚀 Performance & Optimization](#-performance--optimization)
+- [🖥 Screenshots](#-screenshots)
+- [🚧 Challenges](#-challenges)
+- [🤝 Contributions](#-contributions)
+- [🚀 Deployment](#-deployment)
+- [👨‍💻 Team](#-team)
