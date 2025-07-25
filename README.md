@@ -165,6 +165,6 @@ The *Insight Ledger* system is built using a modern and efficient tech stack to 
 ### 📽 Live Prototype Demo:
 > For a detailed walkthrough of the working model and how it runs locally with offline access,  
 > 📺 *Check out the YouTube video here:*  
-👉 [Demo: Insight Ledger - Secure Offline PWA]([https://your-youtube-link-here.com](https://youtu.be/XjuBI6zYfYA?si=_yE9__x_OkgWu8Io)) (Replace with your actual link)
+👉 [Demo: Insight Ledger - Secure Offline PWA]([https://your-youtube-link-here.com](https://youtu.be/XjuBI6zYfYA?si=_yE9__x_OkgWu8Io]) (Replace with your actual link)
 
 
