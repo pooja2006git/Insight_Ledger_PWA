@@ -116,22 +116,22 @@ The **Insight Ledger** system follows a streamlined, secure workflow from login 
 
 Building a semi-offline, encrypted financial app in a short hackathon window came with unique challenges:
 
-### 🔐 In-Browser AES-256 Encryption
+### In-Browser AES-256 Encryption
 Encrypting transaction data client-side using AES-256 without compromising performance or breaking reactivity was a delicate balance. We had to ensure that encryption occurred **before any data was stored** while keeping it **asynchronous and non-blocking** for the UI.
 
-### 🗃️ Working with IndexedDB
+### Working with IndexedDB
 Unlike localStorage, **IndexedDB is asynchronous and schema-driven**, making it powerful but unintuitive. Managing versioning, handling upgrades gracefully, and ensuring reliable read/write operations across sessions required careful abstraction and fallback handling.
 
-### 🌐 Sync Strategy and Offline Behavior
+### Sync Strategy and Offline Behavior
 Designing a **"semi-offline" flow** was nuanced. We needed to:
 - Detect first-time vs returning users.
 - Trigger secure sync only when needed.
 - Gracefully fall back to offline mode without confusing the user.
 
-### 🧠 State Persistence and Data Binding
+### State Persistence and Data Binding
 React state doesn’t persist across reloads. We had to engineer a system where **stored data in IndexedDB could hydrate the UI seamlessly** on relaunch—without reauthentication, and with encryption intact.
 
-### 🧪 Testing Offline UX
+### Testing Offline UX
 Simulating offline behavior in dev environments was tricky. We had to:
 - Emulate no-network conditions.
 - Validate IndexedDB fallback across browsers.
