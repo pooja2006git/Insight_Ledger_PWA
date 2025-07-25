@@ -4,20 +4,19 @@
 
 ## 📚 Table of Contents
 
-- [🔍 Overview](#-overview)
-- [📝 Project Description](#-project-description)
-- [✨ Features](#-features)
-- [⚙ How It Works](#-how-it-works)
-- [🧱 Architecture & Design](#-architecture--design)
-- [🚀 Performance & Optimization](#-performance--optimization)
-- [🖥 Screenshots](#-screenshots)
-- [🚧 Challenges](#-challenges)
-- [🤝 Contributions](#-contributions)
-- [🚀 Deployment](#-deployment)
-- [👨‍💻 Team](#-team)
+- [Overview](#-overview)
+- [Project Description](#-project-description)
+- [Features](#-features)
+- [How It Works](#-how-it-works)
+- [Architecture & Design](#-architecture--design)
+- [Screenshots](#-screenshots)
+- [Challenges](#-challenges)
+- [Contributions](#-contributions)
+- [Deployment](#-deployment)
+- [Team](#-team)
 
 
-## 🔍 Overview
+##  Overview
 
 In many parts of the world, **digital banking assumes constant connectivity**—a luxury not everyone can rely on. Whether in rural communities, during travel, or through routine outages, users are often **locked out of their own financial history** simply due to poor internet access.
 
@@ -37,7 +36,7 @@ Rather than building another interface for online banking, we reimagined the **p
 
 ---
 
-## 📝 Project Description
+##  Project Description
 
 **Insight Ledger** is a secure and intelligent digital banking solution built to function seamlessly even in low or no internet connectivity.
 
@@ -49,7 +48,7 @@ Whether on low-end devices or unstable networks, *Smart E-Passbook* ensures that
 
 ![WhatsApp Image 2025-07-25 at 10 19 25 AM](https://github.com/user-attachments/assets/594be1b4-6c94-4566-9ce6-362ab7793e0f)
 
-## ✨ Features
+##  Features
 
 - **Seamless Offline Access**  
   > Smart caching and IndexedDB storage allow the app to work even with low or no internet connectivity.
@@ -63,7 +62,7 @@ Whether on low-end devices or unstable networks, *Smart E-Passbook* ensures that
   > Reduces server load and banking infrastructure cost using lazy loading techniques and local data handling.
 
 
-## 🔧 How It Works
+##  How It Works
 
 <img width="1920" height="1080" alt="work" src="https://github.com/user-attachments/assets/a0b51ac9-a60b-4969-9e1e-e22b3cb3f4a7" />
 
@@ -101,5 +100,16 @@ The **Insight Ledger** system follows a streamlined, secure workflow from login 
 8. **Cross-Platform and Lightweight**
    - Built as a **Progressive Web App (PWA)**, ensuring native-like performance on web, mobile, and tablets.
    - Optimized using **lazy loading** to reduce server load and ensure fast load times on low-end devices.
+
+##  Screenshots
+
+[Home Page]
+![WhatsApp Image 2025-07-25 at 10 19 25 AM](https://github.com/user-attachments/assets/fa877d69-53e7-473c-9d49-889c71af700d)
+[User Dashboard]
+![WhatsApp Image 2025-07-25 at 10 50 54 AM](https://github.com/user-attachments/assets/dfe72ac9-e8d6-4577-af8b-7957a9a11506)
+[Link Bank Account]
+![WhatsApp Image 2025-07-25 at 12 10 33 PM](https://github.com/user-attachments/assets/893c96ca-e118-4948-9809-bb15198efcab)
+[Transaction View]
+![WhatsApp Image 2025-07-25 at 12 10 14 PM](https://github.com/user-attachments/assets/6791db02-3673-4089-996c-33296bbbfb34)
 
 
