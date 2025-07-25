@@ -53,19 +53,19 @@ Whether on low-end devices or unstable networks, *Smart E-Passbook* ensures that
 ## Features
 
 - **Seamless Offline Access**  
-  Smart caching and IndexedDB storage allow the app to work even with low or no internet connectivity.
+  > Smart caching and IndexedDB storage allow the app to work even with low or no internet connectivity.
 
 - **Secure Biometric & Email Authentication**  
-  Only pilot users with valid email credentials and biometric authentication can access the system securely.
+  > Only pilot users with valid email credentials and biometric authentication can access the system securely.
 
 - **Encrypted Data Transactions**  
-  All transaction data is protected with AES encryption, ensuring confidentiality and data integrity.
+  > All transaction data is protected with AES encryption, ensuring confidentiality and data integrity.
 
 - **Cross-Platform PWA Support**  
-  Installable and functional on any device—mobile, desktop, or tablet—just like a native app.
+  > Installable and functional on any device—mobile, desktop, or tablet—just like a native app.
 
 - **Bank Infrastructure Optimization**  
-  Reduces server load and banking infrastructure cost using lazy loading techniques and local data handling.
+  > Reduces server load and banking infrastructure cost using lazy loading techniques and local data handling.
 
 ---
 
@@ -164,5 +164,5 @@ If you're passionate about **financial inclusion**, **secure apps**, or **offlin
 
 ## Team
 
-- [Pooja Sri](http://www.linkedin.com/in/poojasri2006) – for connection  
-- [Shrinand S Menon](https://www.linkedin.com/in/shrinand-s-menon-b53456296) – for connection
+- [Pooja Sri](http://www.linkedin.com/in/poojasri2006) 
+- [Shrinand S Menon](https://www.linkedin.com/in/shrinand-s-menon-b53456296) 
