@@ -123,7 +123,7 @@ Building a semi-offline, encrypted financial app in a short hackathon window cam
  -Unlike localStorage, **IndexedDB is asynchronous and schema-driven**, making it powerful but unintuitive. Managing versioning, handling upgrades gracefully, and ensuring reliable read/write operations across sessions required careful abstraction and fallback handling.
 
 - **Sync Strategy and Offline Behavior**
- -Designing a **"semi-offline" flow** was nuanced. We needed to:
+ - Designing a **"semi-offline" flow** was nuanced. We needed to:
   - Detect first-time vs returning users.
   - Trigger secure sync only when needed.
   - Gracefully fall back to offline mode without confusing the user.
