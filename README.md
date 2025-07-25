@@ -123,22 +123,30 @@ The **Insight Ledger** system follows a streamlined, secure workflow from login 
 
 ## Challenges Faced
 
+Building a semi-offline, encrypted financial app within a short hackathon window came with unique technical and architectural hurdles:
+
 - **In-Browser AES-256 Encryption**  
-  Encrypting data before local storage without blocking the UI required careful async logic.
+  Encrypting transaction data client-side using AES-256 without compromising performance or reactivity was a delicate balance. We ensured encryption occurred *before any data was stored*, while keeping it *asynchronous and non-blocking* for the UI.
 
 - **Working with IndexedDB**  
-  Schema management, upgrades, and consistent read/write operations were a significant challenge.
+  Unlike localStorage, IndexedDB is asynchronous and schema-driven—powerful, yet unintuitive. We had to manage versioning, handle upgrades gracefully, and ensure reliable read/write operations across sessions with careful abstraction and fallback logic.
 
 - **Sync Strategy and Offline Behavior**  
-  We had to detect first-time users, trigger sync intelligently, and ensure graceful offline fallback.
+  Designing a "semi-offline" flow involved multiple layers of decision-making:
+  - Detecting first-time vs returning users
+  - Triggering secure sync only when necessary
+  - Gracefully falling back to offline mode without disrupting user experience
 
 - **State Persistence and Data Binding**  
-  React state doesn’t persist. We engineered IndexedDB-to-UI hydration without reauthentication.
+  React state doesn’t persist across reloads. We engineered a system where stored data in IndexedDB could hydrate the UI on relaunch—without requiring reauthentication, and with encryption intact.
 
 - **Testing Offline UX**  
-  We emulated no-network conditions, validated cross-browser behavior, and guaranteed seamless fallback.
+  Simulating offline behavior in development was a challenge:
+  - We emulated no-network conditions
+  - Validated IndexedDB fallback across browsers
+  - Ensured that users always had access to a functional UI regardless of connectivity
 
-> These challenges shaped the final architecture of Insight Ledger and deepened our understanding of offline-first design.
+> These challenges deepened our understanding of the intersection between frontend performance, cryptographic security, offline storage, and resilient UX—and directly shaped the architecture of **Insight Ledger**.
 
 ---
 
