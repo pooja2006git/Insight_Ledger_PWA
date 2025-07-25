@@ -33,7 +33,9 @@ Rather than building another interface for online banking, we reimagined the **p
 
 > Insight Ledger isn't just a technical solution—it's a rethink of what access means in an unequal internet landscape.
 
+
 ---
+
 
 ##  Project Description
 
@@ -47,7 +49,9 @@ Whether on low-end devices or unstable networks, *Smart E-Passbook* ensures that
 
 ![WhatsApp Image 2025-07-25 at 10 19 25 AM](https://github.com/user-attachments/assets/594be1b4-6c94-4566-9ce6-362ab7793e0f)
 
+
 ---
+
 
 ##  Features
 
@@ -62,7 +66,9 @@ Whether on low-end devices or unstable networks, *Smart E-Passbook* ensures that
 - **Bank Infrastructure Optimization**  
   > Reduces server load and banking infrastructure cost using lazy loading techniques and local data handling.
 
+
 ---
+
 
 ##  How It Works
 
@@ -103,7 +109,9 @@ The **Insight Ledger** system follows a streamlined, secure workflow from login 
    - Built as a **Progressive Web App (PWA)**, ensuring native-like performance on web, mobile, and tablets.
    - Optimized using **lazy loading** to reduce server load and ensure fast load times on low-end devices.
 
+
 ---
+
 
 ##  Screenshots
 
@@ -116,7 +124,9 @@ The **Insight Ledger** system follows a streamlined, secure workflow from login 
 |-------------------|------------------|
 | ![WhatsApp Image 2025-07-25 at 12 10 33 PM](https://github.com/user-attachments/assets/8029747e-d273-4a81-92ae-c357e4f601ba)|![WhatsApp Image 2025-07-25 at 10 19 25 AM](https://github.com/user-attachments/assets/d57e84e1-1cd5-4b79-a0d8-45ba959cb3e3)
 
+
 ---
+
 
 ## Challenges Faced
 
@@ -145,7 +155,9 @@ Building a semi-offline, encrypted financial app within a short hackathon window
 
 > These challenges deepened our understanding of the intersection between frontend performance, cryptographic security, offline storage, and resilient UX—and directly shaped the architecture of **Insight Ledger**.
 
+
 ---
+
 
 ## 🤝 Contributing
 
@@ -153,7 +165,9 @@ We welcome meaningful contributions to enhance security, performance, and offlin
 
 This system is also designed for integration with open APIs and sector-level platforms to support scalable, real-world adoption and collaborative innovation.
 
+
 ---
+
 
 ## 🚀 Deployment
 
@@ -177,7 +191,9 @@ The *Insight Ledger* system is built using a modern and efficient tech stack to 
 > 📺 *Check out the YouTube video here:*  
 👉 [Demo: Insight Ledger - Secure Offline PWA]([https://your-youtube-link-here.com](https://youtu.be/XjuBI6zYfYA?si=_yE9__x_OkgWu8Io])
 
+
 ---
+
 
 ## Team
 
