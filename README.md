@@ -103,12 +103,12 @@ The **Insight Ledger** system follows a streamlined, secure workflow from login 
 
 ##  Screenshots
 
-| Home Page | User Dashboard |
+| Home Page | User Login |
 |-----------|----------------|
 | ![WhatsApp Image 2025-07-25 at 10 50 54 AM](https://github.com/user-attachments/assets/69f0d8ad-b42d-40cc-8864-146144bd46d4) |![WhatsApp Image 2025-07-25 at 12 10 14 PM](https://github.com/user-attachments/assets/aee20892-0663-4948-a561-a0197b86ab96)
 |
 
-| Link Bank Account | Transaction View |
+| Link Bank Account | User Dashboard |
 |-------------------|------------------|
 | ![WhatsApp Image 2025-07-25 at 12 10 33 PM](https://github.com/user-attachments/assets/8029747e-d273-4a81-92ae-c357e4f601ba)|![WhatsApp Image 2025-07-25 at 10 19 25 AM](https://github.com/user-attachments/assets/d57e84e1-1cd5-4b79-a0d8-45ba959cb3e3)
 |
