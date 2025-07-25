@@ -109,8 +109,9 @@ The **Insight Ledger** system follows a streamlined, secure workflow from login 
 
 | Link Bank Account | Transaction View |
 |-------------------|------------------|
-| ![Link Bank Account](https://github.com/user-attachments/assets/893c96ca-e118-4948-9809-bb15198efcab) | ![Transaction View](https://github.com/user-attachments/assets/6791db02-3673-4089-996c-33296bbbfb34) |
+| ![Link Bank Account](https://github.com/user-attachments/assets/893c96ca-e118-4948-9809-bb15198efcab) | ![Transaction View](https://github.com/user-attachments/assets/fa877d69-53e7-473c-9d49-889c71af700d) |
 
 https://github.com/user-attachments/assets/fa877d69-53e7-473c-9d49-889c71af700d
 
 https://github.com/user-attachments/assets/dfe72ac9-e8d6-4577-af8b-7957a9a11506
+https://github.com/user-attachments/assets/6791db02-3673-4089-996c-33296bbbfb34
