@@ -105,13 +105,13 @@ The **Insight Ledger** system follows a streamlined, secure workflow from login 
 
 | Home Page | User Dashboard |
 |-----------|----------------|
-| ![User Dashboard](https://github.com/user-attachments/assets/dfe72ac9-e8d6-4577-af8b-7957a9a11506)  |![Home Page](https://github.com/user-attachments/assets/fa877d69-53e7-473c-9d49-889c71af700d) |
+| ![WhatsApp Image 2025-07-25 at 10 50 54 AM](https://github.com/user-attachments/assets/69f0d8ad-b42d-40cc-8864-146144bd46d4)
+ |![WhatsApp Image 2025-07-25 at 12 10 14 PM](https://github.com/user-attachments/assets/aee20892-0663-4948-a561-a0197b86ab96)
+|
 
 | Link Bank Account | Transaction View |
 |-------------------|------------------|
-| ![Link Bank Account](https://github.com/user-attachments/assets/893c96ca-e118-4948-9809-bb15198efcab) | ![Transaction View](https://github.com/user-attachments/assets/fa877d69-53e7-473c-9d49-889c71af700d) |
+| ![WhatsApp Image 2025-07-25 at 12 10 33 PM](https://github.com/user-attachments/assets/8029747e-d273-4a81-92ae-c357e4f601ba)
+ |![WhatsApp Image 2025-07-25 at 10 19 25 AM](https://github.com/user-attachments/assets/d57e84e1-1cd5-4b79-a0d8-45ba959cb3e3)
+|
 
-https://github.com/user-attachments/assets/fa877d69-53e7-473c-9d49-889c71af700d
-
-https://github.com/user-attachments/assets/dfe72ac9-e8d6-4577-af8b-7957a9a11506
-https://github.com/user-attachments/assets/6791db02-3673-4089-996c-33296bbbfb34
