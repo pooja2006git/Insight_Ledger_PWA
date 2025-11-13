@@ -1,4 +1,4 @@
-# Insight_Ledger_PWA
+🎓 # Insight_Ledger_PWA
 
 ![Dashboard](https://github.com/pooja2006git/Insight_Ledger_PWA/blob/main/images/img1.jpeg?raw=true)
 
@@ -17,6 +17,7 @@
 - [How It Works](#how-it-works)
 - [Screenshots](#screenshots)
 - [Deployment](#deployment)
+- [ Future Enhancements](#Future-Enhancements)
 
 ---
 
@@ -129,6 +130,15 @@ Modern animations, clean layout, and optimized display across all screen sizes.
 - **Encryption:** AES-256 (via CryptoJS)  
 - **Local Storage:** IndexedDB  
 - **Platform:** Progressive Web App (PWA)
+
+---
+
+## 🚀 Future Enhancements  
+
+- ✅ Real bank API integration for live data  
+- 📊 AI-based spending analytics and suggestions  
+- 📄 Export passbook summary (PDF/Excel)  
+- 🔔 Smart alerts for income/expense thresholds
 
 ---
 
