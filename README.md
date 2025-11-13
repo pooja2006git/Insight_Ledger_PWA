@@ -108,13 +108,13 @@ Modern animations, clean layout, and optimized display across all screen sizes.
 
 ## Screenshots
 
-| Home Page | User Login |
+| Register | User Login |
 |-----------|------------|
 | ![Register](https://github.com/pooja2006git/Insight_Ledger_PWA/blob/main/images/img2.jpeg?raw=true) | ![Login](https://github.com/pooja2006git/Insight_Ledger_PWA/blob/main/images/img3.jpeg?raw=true) |
 
 |  User Dashboard  | Lazy Loading |
 |-------------------|----------------|
-| ![Link](https://github.com/pooja2006git/Insight_Ledger_PWA/blob/main/images/img4.jpeg?raw=true) | ![Dashboard](https://github.com/pooja2006git/Insight_Ledger_PWA/blob/main/images/img5.jpeg?raw=true) |
+| ![User Account Dashboard](https://github.com/pooja2006git/Insight_Ledger_PWA/blob/main/images/img4.jpeg?raw=true) | ![Lazy Loading](https://github.com/pooja2006git/Insight_Ledger_PWA/blob/main/images/img5.jpeg?raw=true) |
 
 ---
 
