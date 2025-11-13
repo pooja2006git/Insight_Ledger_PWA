@@ -1,6 +1,6 @@
 # Insight_Ledger_PWA
 
-![WhatsApp Image 2025-07-25 at 10 50 54 AM](https://github.com/user-attachments/assets/e3350443-923e-4d7f-b514-f5053ff19337)
+![Dashboard](https://github.com/pooja2006git/Insight_Ledger_PWA/blob/main/images/img1.jpeg?raw=true)
 
 ---
 
