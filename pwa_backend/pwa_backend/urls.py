@@ -11,4 +11,5 @@ urlpatterns = [
     path('api/auth/login/', obtain_auth_token, name='api_token_auth'),
     path('api/auth/register/', register_user, name='register_user'),
     path('api/', include('transactions.urls')),
+    path('api/accounts/', include('accounts.urls')),
 ] 

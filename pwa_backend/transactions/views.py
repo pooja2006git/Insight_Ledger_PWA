@@ -2,7 +2,7 @@ from rest_framework import status, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from .models import Transaction
@@ -13,23 +13,44 @@ from .utils import generate_sample_transactions
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
-    """Register a new user"""
+    """Register a new user with bank account details"""
     serializer = RegisterUserSerializer(data=request.data)
+    
     if serializer.is_valid():
         user = serializer.save()
-        token, created = Token.objects.get_or_create(user=user)
+        # Generate JWT token for the newly registered user
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
         
         # Generate sample transactions for the new user
         sample_transactions = generate_sample_transactions(user)
         Transaction.objects.bulk_create(sample_transactions)
         
+        # Return response in the exact format requested
         return Response({
-            'user': UserSerializer(user).data,
-            'token': token.key,
-            'message': 'User registered successfully with sample transactions'
+            'user': {
+                'name': user.first_name or user.username,
+                'email': user.email
+            },
+            'token': access_token,
+            'message': 'User registered successfully'
         }, status=status.HTTP_201_CREATED)
     
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # Handle validation errors
+    errors = serializer.errors
+    
+    # Check for password mismatch error in non_field_errors
+    if 'non_field_errors' in errors:
+        error_messages = errors['non_field_errors']
+        if isinstance(error_messages, list):
+            for error in error_messages:
+                if 'Passwords do not match' in str(error) or 'password' in str(error).lower():
+                    return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
+        elif 'Passwords do not match' in str(error_messages):
+            return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Return other validation errors
+    return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TransactionListCreateView(generics.ListCreateAPIView):

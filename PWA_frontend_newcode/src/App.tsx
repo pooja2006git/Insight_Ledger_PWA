@@ -1,96 +1,428 @@
 import React, { useState, useEffect } from 'react';
-import { User, Lock, Fingerprint, Brain, Wifi, WifiOff, Clock, CreditCard, DollarSign, ShoppingCart, GraduationCap, Home, Car, Shield, Building2, Hash, UserCheck, Search, Filter, X, CheckCircle } from 'lucide-react';
+import { User, Lock, Fingerprint, Brain, WifiOff, Clock, CreditCard, DollarSign, ShoppingCart, GraduationCap, Home, Car, Shield, Search, Filter, X, CheckCircle, AlertCircle, Loader2, ArrowRight, LogOut, XCircle, FileText } from 'lucide-react';
+import apiService, { FrontendTransaction, TransactionStats } from './services/api';
+import Register from './Register';
 
-interface Transaction {
-  id: string;
-  amount: number;
-  category: string;
-  time: string;
-  type: 'income' | 'expense';
+interface Transaction extends FrontendTransaction {
   icon: React.ReactNode;
 }
 
-const transactions: Transaction[] = [
-  {
-    id: 'TXN001',
-    amount: 5000,
-    category: 'Salary',
-    time: '2 hours ago',
-    type: 'income',
-    icon: <DollarSign className="w-5 h-5" />
-  },
-  {
-    id: 'TXN002',
-    amount: 250,
-    category: 'Grocery',
-    time: '5 hours ago',
-    type: 'expense',
-    icon: <ShoppingCart className="w-5 h-5" />
-  },
-  {
-    id: 'TXN003',
-    amount: 800,
-    category: 'Fees',
-    time: '1 day ago',
-    type: 'expense',
-    icon: <GraduationCap className="w-5 h-5" />
-  },
-  {
-    id: 'TXN004',
-    amount: 150,
-    category: 'Utilities',
-    time: '2 days ago',
-    type: 'expense',
-    icon: <Home className="w-5 h-5" />
-  },
-  {
-    id: 'TXN005',
-    amount: 320,
-    category: 'Others',
-    time: '3 days ago',
-    type: 'expense',
-    icon: <Car className="w-5 h-5" />
-  },
-  {
-    id: 'TXN006',
-    amount: 1200,
-    category: 'Freelance',
-    time: '4 days ago',
-    type: 'income',
-    icon: <CreditCard className="w-5 h-5" />
+// Map categories to icons
+const getCategoryIcon = (category: string): React.ReactNode => {
+  const categoryLower = category.toLowerCase();
+  if (categoryLower.includes('salary') || categoryLower.includes('income')) {
+    return <DollarSign className="w-5 h-5" />;
+  } else if (categoryLower.includes('grocery')) {
+    return <ShoppingCart className="w-5 h-5" />;
+  } else if (categoryLower.includes('fees') || categoryLower.includes('education')) {
+    return <GraduationCap className="w-5 h-5" />;
+  } else if (categoryLower.includes('utilities') || categoryLower.includes('home')) {
+    return <Home className="w-5 h-5" />;
+  } else if (categoryLower.includes('transport') || categoryLower.includes('car')) {
+    return <Car className="w-5 h-5" />;
+  } else {
+    return <CreditCard className="w-5 h-5" />;
   }
-];
+};
 
-const categories = ['Grocery', 'Salary', 'Fees', 'Utilities', 'Freelance', 'Others'];
+// Format relative time (e.g., "2h ago", "Yesterday", "3d ago")
+const formatRelativeTime = (date: Date): string => {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7) return `${diffDays}d ago`;
+  return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+};
+
+// Generate dummy transactions
+const generateDummyTransactions = (): Transaction[] => {
+  const now = new Date();
+  const createTransaction = (
+    id: string,
+    title: string,
+    amount: number,
+    type: 'income' | 'expense',
+    category: string,
+    date: Date,
+    description: string
+  ): Transaction => ({
+    id,
+    title,
+    amount,
+    type,
+    category,
+    date: date.toISOString(),
+    time: formatRelativeTime(date),
+    description,
+    icon: getCategoryIcon(category),
+  });
+
+  const dummyData: Transaction[] = [
+    createTransaction(
+      'TXN-001',
+      'Grocery Shopping',
+      1250.50,
+      'expense',
+      'grocery',
+      new Date(now.getTime() - 1 * 3600000), // 1h ago
+      'Weekly groceries from supermarket'
+    ),
+    createTransaction(
+      'TXN-002',
+      'Freelance Payment',
+      3200.00,
+      'income',
+      'salary',
+      new Date(now.getTime() - 2 * 3600000), // 2h ago
+      'Payment for web development project'
+    ),
+    createTransaction(
+      'TXN-003',
+      'Uber Ride',
+      350.00,
+      'expense',
+      'transport',
+      new Date(now.getTime() - 3 * 3600000), // 3h ago
+      'Ride to office'
+    ),
+    createTransaction(
+      'TXN-004',
+      'Coffee Shop',
+      280.00,
+      'expense',
+      'other',
+      new Date(now.getTime() - 5 * 3600000), // 5h ago
+      'Morning coffee and breakfast'
+    ),
+    createTransaction(
+      'TXN-005',
+      'Part-time Job',
+      1800.00,
+      'income',
+      'salary',
+      new Date(now.getTime() - 8 * 3600000), // 8h ago
+      'Weekly part-time work payment'
+    ),
+    createTransaction(
+      'TXN-006',
+      'Restaurant Dinner',
+      1850.00,
+      'expense',
+      'other',
+      new Date(now.getTime() - 12 * 3600000), // 12h ago
+      'Dinner with friends'
+    ),
+    createTransaction(
+      'TXN-007',
+      'Online Tutoring',
+      2400.00,
+      'income',
+      'salary',
+      new Date(now.getTime() - 18 * 3600000), // 18h ago
+      'Tutoring session payment'
+    ),
+    createTransaction(
+      'TXN-008',
+      'Pharmacy',
+      650.00,
+      'expense',
+      'other',
+      new Date(now.getTime() - 24 * 3600000), // Yesterday
+      'Medicine and health supplies'
+    ),
+    createTransaction(
+      'TXN-009',
+      'Bookstore',
+      890.00,
+      'expense',
+      'other',
+      new Date(now.getTime() - 26 * 3600000), // 26h ago
+      'Purchased study materials'
+    ),
+    createTransaction(
+      'TXN-010',
+      'Graphic Design Project',
+      4200.00,
+      'income',
+      'salary',
+      new Date(now.getTime() - 2 * 86400000), // 2d ago
+      'Payment for logo design work'
+    ),
+    createTransaction(
+      'TXN-011',
+      'Electricity Bill',
+      2200.00,
+      'expense',
+      'utilities',
+      new Date(now.getTime() - 2 * 86400000 - 4 * 3600000), // 2d 4h ago
+      'Monthly electricity bill payment'
+    ),
+    createTransaction(
+      'TXN-012',
+      'Movie Tickets',
+      750.00,
+      'expense',
+      'other',
+      new Date(now.getTime() - 3 * 86400000), // 3d ago
+      'Weekend movie with family'
+    ),
+    createTransaction(
+      'TXN-013',
+      'Content Writing',
+      3100.00,
+      'income',
+      'salary',
+      new Date(now.getTime() - 3 * 86400000 - 6 * 3600000), // 3d 6h ago
+      'Article writing payment'
+    ),
+    createTransaction(
+      'TXN-014',
+      'Gym Membership',
+      1500.00,
+      'expense',
+      'other',
+      new Date(now.getTime() - 4 * 86400000), // 4d ago
+      'Monthly gym subscription'
+    ),
+    createTransaction(
+      'TXN-015',
+      'Course Fees',
+      3800.00,
+      'expense',
+      'fees',
+      new Date(now.getTime() - 4 * 86400000 - 8 * 3600000), // 4d 8h ago
+      'Online course enrollment'
+    ),
+    createTransaction(
+      'TXN-016',
+      'Photography Gig',
+      4500.00,
+      'income',
+      'salary',
+      new Date(now.getTime() - 5 * 86400000), // 5d ago
+      'Event photography payment'
+    ),
+    createTransaction(
+      'TXN-017',
+      'Gas Station',
+      1200.00,
+      'expense',
+      'transport',
+      new Date(now.getTime() - 5 * 86400000 - 12 * 3600000), // 5d 12h ago
+      'Fuel for vehicle'
+    ),
+    createTransaction(
+      'TXN-018',
+      'Consulting Fee',
+      2800.00,
+      'income',
+      'salary',
+      new Date(now.getTime() - 6 * 86400000), // 6d ago
+      'Business consulting payment'
+    ),
+    createTransaction(
+      'TXN-019',
+      'Internet Bill',
+      950.00,
+      'expense',
+      'utilities',
+      new Date(now.getTime() - 6 * 86400000 - 18 * 3600000), // 6d 18h ago
+      'Monthly internet subscription'
+    ),
+    createTransaction(
+      'TXN-020',
+      'Translation Work',
+      1650.00,
+      'income',
+      'salary',
+      new Date(now.getTime() - 7 * 86400000), // 7d ago
+      'Document translation payment'
+    ),
+  ];
+  
+  // Sort by date (most recent first)
+  return dummyData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+};
 
 function App() {
-  const [currentStep, setCurrentStep] = useState<'splash' | 'login' | 'link' | 'dashboard'>('splash');
+  const [currentStep, setCurrentStep] = useState<'splash' | 'login' | 'register' | 'dashboard'>('splash');
   const [credentials, setCredentials] = useState({ email: '', password: '' });
-  const [accountDetails, setAccountDetails] = useState({ 
-    accountNumber: '', 
-    ifscCode: '', 
-    name: '' 
-  });
+
+  // Validation states
+  const [loginErrors, setLoginErrors] = useState({ email: '', password: '' });
+  const [isLoginValid, setIsLoginValid] = useState(false);
+
+  // API states
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [stats, setStats] = useState<TransactionStats | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [hasValidToken, setHasValidToken] = useState(false);
+
+  // Validation functions
+  const validateEmail = (email: string): string => {
+    if (!email) return 'Email is required';
+    if (!email.includes('@')) return 'Email must contain @ symbol';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return 'Please enter a valid email format';
+    return '';
+  };
+
+  const validatePassword = (password: string): string => {
+    if (!password) return 'Password is required';
+    if (password.length < 8) return 'Password must be at least 8 characters';
+    if (!/\d/.test(password)) return 'Password must contain at least one number';
+    if (!/[A-Z]/.test(password)) return 'Password must contain at least one uppercase letter';
+    return '';
+  };
+
   
   // Transaction filtering states
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   
+  // Lazy loading states
+  const [displayedCount, setDisplayedCount] = useState(5);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const observerTarget = React.useRef<HTMLDivElement>(null);
+  
   // Online/Offline states
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [showConnectionPopup, setShowConnectionPopup] = useState(false);
   const [connectionMessage, setConnectionMessage] = useState('');
 
-  // Auto-transition from splash to login after 3 seconds
+  // Load dashboard data (transactions and stats) - using dummy data
+  const loadDashboardData = React.useCallback(async () => {
+    if (!apiService.isAuthenticated()) return;
+
+    setLoading(true);
+    setError(null);
+    try {
+      // Use dummy transactions instead of API call
+      const dummyTransactions = generateDummyTransactions();
+      
+      // Calculate stats from dummy transactions
+      const totalIncome = dummyTransactions
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
+      const totalExpenses = dummyTransactions
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
+      const netAmount = totalIncome - totalExpenses;
+      
+      const statsData: TransactionStats = {
+        total_income: totalIncome,
+        total_expenses: totalExpenses,
+        net_amount: netAmount,
+        total_transactions: dummyTransactions.length,
+        transaction_types: {},
+      };
+
+      setTransactions(dummyTransactions);
+      setStats(statsData);
+      // Reset displayed count to 5 when transactions are loaded
+      setDisplayedCount(5);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load data';
+      setError(errorMessage);
+      console.error('Error loading dashboard data:', err);
+      
+      // If authentication failed, redirect to login
+      if (errorMessage.includes('Authentication failed') || errorMessage.includes('401')) {
+        apiService.logout();
+        setCurrentStep('login');
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Check if user is already authenticated on mount and verify token
+  useEffect(() => {
+    const checkAuth = async () => {
+      if (apiService.isAuthenticated()) {
+        // Verify token is still valid
+        const isValid = await apiService.verifyToken();
+        if (isValid) {
+          setCurrentStep('dashboard');
+          loadDashboardData();
+        } else {
+          // Token is invalid, redirect to login
+          setCurrentStep('login');
+          apiService.logout();
+        }
+      }
+    };
+    checkAuth();
+  }, [loadDashboardData]);
+
+  // Auto-transition from splash to login or dashboard after 3 seconds
   useEffect(() => {
     if (currentStep === 'splash') {
-      const timer = setTimeout(() => {
-        setCurrentStep('login');
+      const timer = setTimeout(async () => {
+        // Check if user is authenticated
+        if (apiService.isAuthenticated()) {
+          const isValid = await apiService.verifyToken();
+          if (isValid) {
+            setCurrentStep('dashboard');
+          } else {
+            setCurrentStep('login');
+          }
+        } else {
+          setCurrentStep('login');
+        }
       }, 3000);
       return () => clearTimeout(timer);
     }
   }, [currentStep]);
+
+  // Check for valid token when on login page
+  useEffect(() => {
+    const checkTokenOnLogin = async () => {
+      if (currentStep === 'login') {
+        if (apiService.isAuthenticated()) {
+          const isValid = await apiService.verifyToken();
+          setHasValidToken(isValid);
+        } else {
+          setHasValidToken(false);
+        }
+      }
+    };
+    checkTokenOnLogin();
+  }, [currentStep]);
+
+  // Load dashboard data when dashboard is shown and verify token
+  useEffect(() => {
+    const loadDashboardIfAuthenticated = async () => {
+      if (currentStep === 'dashboard') {
+        if (!apiService.isAuthenticated()) {
+          // No token, redirect to login
+          setCurrentStep('login');
+          return;
+        }
+        
+        // Verify token is valid
+        const isValid = await apiService.verifyToken();
+        if (isValid) {
+          loadDashboardData();
+        } else {
+          // Token is invalid, redirect to login
+          setCurrentStep('login');
+          apiService.logout();
+        }
+      }
+    };
+    loadDashboardIfAuthenticated();
+  }, [currentStep, loadDashboardData]);
 
   // Online/Offline detection
   useEffect(() => {
@@ -119,33 +451,129 @@ function App() {
     };
   }, [isOnline]);
 
+  // Get unique categories from transactions
+  const categories = Array.from(new Set(transactions.map(t => t.category)));
+
   // Filter transactions based on search and category
   const filteredTransactions = transactions.filter(transaction => {
     const matchesSearch = transaction.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         transaction.id.toLowerCase().includes(searchTerm.toLowerCase());
+                         transaction.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         transaction.title?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = !selectedCategory || transaction.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const handleLogin = (e: React.FormEvent) => {
+  // Get displayed transactions (lazy loaded)
+  const displayedTransactions = filteredTransactions.slice(0, displayedCount);
+  const hasMoreTransactions = displayedCount < filteredTransactions.length;
+
+  // Reset displayed count when filters change
+  useEffect(() => {
+    setDisplayedCount(5);
+  }, [searchTerm, selectedCategory]);
+
+  // Load more transactions function
+  const loadMoreTransactions = React.useCallback(() => {
+    if (isLoadingMore || !hasMoreTransactions) return;
+    
+    setIsLoadingMore(true);
+    
+    // Simulate async loading with a small delay for smooth UX
+    setTimeout(() => {
+      setDisplayedCount(prev => {
+        const nextCount = prev + 5;
+        return Math.min(nextCount, filteredTransactions.length);
+      });
+      setIsLoadingMore(false);
+    }, 400);
+  }, [isLoadingMore, hasMoreTransactions, filteredTransactions.length]);
+
+  // IntersectionObserver for lazy loading
+  useEffect(() => {
+    if (!hasMoreTransactions || isLoadingMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && hasMoreTransactions && !isLoadingMore) {
+          loadMoreTransactions();
+        }
+      },
+      {
+        root: null,
+        rootMargin: '150px', // Start loading 150px before reaching the bottom
+        threshold: 0.1,
+      }
+    );
+
+    const currentTarget = observerTarget.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [hasMoreTransactions, isLoadingMore, loadMoreTransactions]);
+
+  // Validation handlers
+  const handleLoginFieldChange = (field: 'email' | 'password', value: string) => {
+    const newCredentials = {...credentials, [field]: value};
+    setCredentials(newCredentials);
+    
+    const error = field === 'email' ? validateEmail(value) : validatePassword(value);
+    setLoginErrors({...loginErrors, [field]: error});
+    
+    // Check if form is valid
+    const emailError = field === 'email' ? error : validateEmail(newCredentials.email);
+    const passwordError = field === 'password' ? error : validatePassword(newCredentials.password);
+    setIsLoginValid(!emailError && !passwordError && !!newCredentials.email && !!newCredentials.password);
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple validation for demo
-    if (credentials.email && credentials.password) {
-      setCurrentStep('link');
+    if (!isLoginValid) return;
+
+    setLoginLoading(true);
+    setError(null);
+    setLoginErrors({ email: '', password: '' });
+
+    try {
+      await apiService.login(credentials.email, credentials.password);
+      // Token is automatically stored by apiService
+      // Redirect to dashboard
+      setCurrentStep('dashboard');
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Login failed';
+      setError(errorMessage);
+      setLoginErrors({
+        email: errorMessage.includes('email') || errorMessage.includes('Invalid') ? errorMessage : '',
+        password: errorMessage.includes('password') || errorMessage.includes('Invalid') ? errorMessage : '',
+      });
+    } finally {
+      setLoginLoading(false);
     }
   };
 
   const handleBiometricLogin = () => {
     // Simulate biometric authentication
-    setCurrentStep('link');
+    setCurrentStep('dashboard');
   };
 
-  const handleLinkAccount = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Store account details in state (no backend call)
-    if (accountDetails.accountNumber && accountDetails.ifscCode && accountDetails.name) {
-      setCurrentStep('dashboard');
-    }
+  const handleRegisterSuccess = () => {
+    setCurrentStep('dashboard');
+  };
+
+  const handleGoToRegister = () => {
+    setCurrentStep('register');
+  };
+
+  const handleGoToLogin = () => {
+    setCurrentStep('login');
+    setError(null);
+    setCredentials({ email: '', password: '' });
   };
 
   const clearFilter = () => {
@@ -275,9 +703,16 @@ function App() {
                       type="email"
                       placeholder="Email"
                       value={credentials.email}
-                      onChange={(e) => setCredentials({...credentials, email: e.target.value})}
-                      className="w-full pl-12 pr-4 py-4 bg-gray-700/80 border border-gray-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all duration-300 text-lg placeholder-gray-400 text-white"
+                      onChange={(e) => handleLoginFieldChange('email', e.target.value)}
+                      className={`w-full pl-12 pr-4 py-4 bg-gray-700/80 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-lg placeholder-gray-400 text-white ${
+                        loginErrors.email 
+                          ? 'border-red-500 focus:ring-red-500/50 focus:border-red-500' 
+                          : 'border-gray-600/50 focus:ring-green-500/50 focus:border-green-500'
+                      }`}
                     />
+                    {loginErrors.email && (
+                      <p className="text-red-400 text-sm mt-1 ml-1">{loginErrors.email}</p>
+                    )}
                   </div>
                   
                   <div className="relative">
@@ -286,17 +721,37 @@ function App() {
                       type="password"
                       placeholder="Password"
                       value={credentials.password}
-                      onChange={(e) => setCredentials({...credentials, password: e.target.value})}
-                      className="w-full pl-12 pr-4 py-4 bg-gray-700/80 border border-gray-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all duration-300 text-lg placeholder-gray-400 text-white"
+                      onChange={(e) => handleLoginFieldChange('password', e.target.value)}
+                      className={`w-full pl-12 pr-4 py-4 bg-gray-700/80 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-lg placeholder-gray-400 text-white ${
+                        loginErrors.password 
+                          ? 'border-red-500 focus:ring-red-500/50 focus:border-red-500' 
+                          : 'border-gray-600/50 focus:ring-green-500/50 focus:border-green-500'
+                      }`}
                     />
+                    {loginErrors.password && (
+                      <p className="text-red-400 text-sm mt-1 ml-1">{loginErrors.password}</p>
+                    )}
                   </div>
                 </div>
 
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500/50 rounded-xl p-3 flex items-center space-x-2 text-red-400 text-sm">
+                    <AlertCircle className="w-4 h-4" />
+                    <span>{error}</span>
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full py-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-lg shadow-green-500/25"
+                  disabled={!isLoginValid || loginLoading}
+                  className={`w-full py-4 font-semibold rounded-xl transition-all duration-300 shadow-lg text-lg flex items-center justify-center space-x-2 ${
+                    isLoginValid && !loginLoading
+                      ? 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 transform hover:scale-105 hover:shadow-xl shadow-green-500/25'
+                      : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                  }`}
                 >
-                  Sign In
+                  {loginLoading && <Loader2 className="w-5 h-5 animate-spin" />}
+                  <span>{loginLoading ? 'Signing in...' : 'Sign In'}</span>
                 </button>
               </form>
 
@@ -310,6 +765,33 @@ function App() {
                   <span className="text-gray-300 font-medium">Biometric Login</span>
                 </button>
               </div>
+
+              {/* Continue to Dashboard if valid token exists */}
+              {hasValidToken && (
+                <div className="mt-6 text-center border-t border-gray-700/50 pt-6">
+                  <p className="text-gray-400 text-sm mb-4">Already logged in?</p>
+                  <button
+                    onClick={() => {
+                      setCurrentStep('dashboard');
+                    }}
+                    className="w-full py-3 bg-gradient-to-r from-green-500/20 to-green-600/20 hover:from-green-500/30 hover:to-green-600/30 text-green-400 font-semibold rounded-xl transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-2 border border-green-500/30 mb-4"
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                    <span>Continue to Dashboard</span>
+                  </button>
+                </div>
+              )}
+
+              <div className={`mt-6 text-center ${hasValidToken ? '' : 'border-t border-gray-700/50 pt-6'}`}>
+                <p className="text-gray-400 text-sm mb-4">Don't have an account?</p>
+                <button
+                  onClick={handleGoToRegister}
+                  className="inline-flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors duration-300 font-medium group"
+                >
+                  <span>Create Account</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -317,83 +799,9 @@ function App() {
     );
   }
 
-  // Link Account Screen
-  if (currentStep === 'link') {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 relative overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-r from-green-500/10 to-green-400/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-l from-green-400/8 to-green-500/8 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-green-400/5 to-green-500/5 rounded-full blur-2xl animate-pulse delay-500"></div>
-        </div>
-
-        {/* Link Account Form */}
-        <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
-          <div className="w-full max-w-md">
-            <div className="bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-gray-700/50">
-              <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-500/25">
-                  <Building2 className="w-8 h-8 text-white" />
-                </div>
-                <h1 className="text-3xl font-bold text-white mb-2">Link Your Account</h1>
-                <p className="text-gray-300">Connect your bank account securely</p>
-              </div>
-
-              <form onSubmit={handleLinkAccount} className="space-y-6">
-                <div className="space-y-4">
-                  <div className="relative">
-                    <Hash className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <input
-                      type="text"
-                      placeholder="Account Number"
-                      value={accountDetails.accountNumber}
-                      onChange={(e) => setAccountDetails({...accountDetails, accountNumber: e.target.value})}
-                      className="w-full pl-12 pr-4 py-4 bg-gray-700/80 border border-gray-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all duration-300 text-lg placeholder-gray-400 text-white"
-                    />
-                  </div>
-                  
-                  <div className="relative">
-                    <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <input
-                      type="text"
-                      placeholder="IFSC Code"
-                      value={accountDetails.ifscCode}
-                      onChange={(e) => setAccountDetails({...accountDetails, ifscCode: e.target.value})}
-                      className="w-full pl-12 pr-4 py-4 bg-gray-700/80 border border-gray-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all duration-300 text-lg placeholder-gray-400 text-white"
-                    />
-                  </div>
-
-                  <div className="relative">
-                    <UserCheck className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <input
-                      type="text"
-                      placeholder="Account Holder Name"
-                      value={accountDetails.name}
-                      onChange={(e) => setAccountDetails({...accountDetails, name: e.target.value})}
-                      className="w-full pl-12 pr-4 py-4 bg-gray-700/80 border border-gray-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all duration-300 text-lg placeholder-gray-400 text-white"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-lg shadow-green-500/25"
-                >
-                  Link Account
-                </button>
-              </form>
-
-              <div className="mt-6 text-center">
-                <p className="text-gray-400 text-sm">
-                  Your account details are encrypted and secure
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+  // Register Screen
+  if (currentStep === 'register') {
+    return <Register onRegisterSuccess={handleRegisterSuccess} onGoToLogin={handleGoToLogin} />;
   }
 
   // Dashboard Screen (existing transaction page with modifications)
@@ -445,6 +853,41 @@ function App() {
                 <p className="text-gray-300">Intelligent transaction management</p>
               </div>
             </div>
+            
+            {/* Sign Out and Close Buttons */}
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => {
+                  // Close - redirect to login page without clearing token
+                  // User remains logged in and can return to dashboard
+                  setCurrentStep('login');
+                  setError(null);
+                  setCredentials({ email: '', password: '' });
+                }}
+                className="px-4 py-2 bg-gray-700/80 hover:bg-gray-600/80 text-gray-300 rounded-xl transition-all duration-300 hover:scale-105 flex items-center space-x-2 border border-gray-600/50"
+                title="Close"
+              >
+                <XCircle className="w-4 h-4" />
+                <span className="text-sm font-medium">Close</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  // Sign Out - clear token and redirect to login
+                  apiService.logout();
+                  setCurrentStep('login');
+                  setTransactions([]);
+                  setStats(null);
+                  setCredentials({ email: '', password: '' });
+                  setError(null);
+                }}
+                className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl transition-all duration-300 hover:scale-105 flex items-center space-x-2 shadow-lg shadow-red-500/25"
+                title="Sign Out"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="text-sm font-medium">Sign Out</span>
+              </button>
+            </div>
           </div>
 
           {/* Stats Cards */}
@@ -452,8 +895,10 @@ function App() {
             <div className="bg-gray-800/90 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50 shadow-lg">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-400 text-sm">Total Balance</p>
-                  <p className="text-2xl font-bold text-white">₹12,450</p>
+                  <p className="text-gray-400 text-sm">Net Balance</p>
+                  <p className={`text-2xl font-bold ${stats && stats.net_amount >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    ₹{stats ? Math.abs(stats.net_amount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
+                  </p>
                 </div>
                 <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
                   <CreditCard className="w-6 h-6 text-green-400" />
@@ -464,8 +909,10 @@ function App() {
             <div className="bg-gray-800/90 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50 shadow-lg">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-400 text-sm">This Month</p>
-                  <p className="text-2xl font-bold text-green-400">+₹6,200</p>
+                  <p className="text-gray-400 text-sm">Total Income</p>
+                  <p className="text-2xl font-bold text-green-400">
+                    +₹{stats ? stats.total_income.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
+                  </p>
                 </div>
                 <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
                   <DollarSign className="w-6 h-6 text-green-400" />
@@ -477,7 +924,9 @@ function App() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-sm">Transactions</p>
-                  <p className="text-2xl font-bold text-white">156</p>
+                  <p className="text-2xl font-bold text-white">
+                    {stats ? stats.total_transactions : transactions.length}
+                  </p>
                 </div>
                 <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
                   <Clock className="w-6 h-6 text-green-400" />
@@ -561,43 +1010,89 @@ function App() {
             </div>
             
             <div className="divide-y divide-gray-700/50">
-              {filteredTransactions.length > 0 ? (
-                filteredTransactions.map((transaction) => (
-                  <div key={transaction.id} className="p-6 hover:bg-gray-700/30 transition-all duration-300 group">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                          transaction.type === 'income' 
-                            ? 'bg-green-500/20 text-green-400' 
-                            : 'bg-red-500/20 text-red-400'
-                        }`}>
-                          {transaction.icon}
-                        </div>
-                        <div>
-                          <p className="font-semibold text-white group-hover:text-gray-100 transition-colors">
-                            {transaction.category}
-                          </p>
-                          <div className="flex items-center space-x-2 text-sm text-gray-400">
-                            <Clock className="w-3 h-3" />
-                            <span>{transaction.time}</span>
-                            <span>•</span>
-                            <span>{transaction.id}</span>
+              {loading ? (
+                <div className="p-12 text-center">
+                  <Loader2 className="w-8 h-8 text-green-400 animate-spin mx-auto mb-4" />
+                  <p className="text-gray-400">Loading transactions...</p>
+                </div>
+              ) : error ? (
+                <div className="p-12 text-center">
+                  <AlertCircle className="w-8 h-8 text-red-400 mx-auto mb-4" />
+                  <p className="text-gray-400 text-lg">{error}</p>
+                  <button
+                    onClick={loadDashboardData}
+                    className="mt-4 px-4 py-2 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 transition-colors"
+                  >
+                    Retry
+                  </button>
+                </div>
+              ) : displayedTransactions.length > 0 ? (
+                <>
+                  {displayedTransactions.map((transaction) => (
+                    <div key={transaction.id} className="p-6 hover:bg-gray-700/30 transition-all duration-300 group">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4 flex-1">
+                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 text-2xl ${
+                            transaction.type === 'income' 
+                              ? 'bg-green-500/20' 
+                              : 'bg-red-500/20'
+                          }`}>
+                            {transaction.type === 'income' ? '💰' : '🛒'}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-white group-hover:text-gray-100 transition-colors truncate">
+                              {transaction.title || transaction.category}
+                            </p>
+                            <div className="flex items-center space-x-2 text-sm text-gray-400 mt-1 flex-wrap">
+                              <span className="text-xs font-mono text-gray-500">{transaction.id}</span>
+                              <span>•</span>
+                              <div className="flex items-center space-x-1">
+                                <Clock className="w-3 h-3" />
+                                <span>{transaction.time}</span>
+                              </div>
+                              <span>•</span>
+                              <span>{transaction.category}</span>
+                              {transaction.description && (
+                                <>
+                                  <span>•</span>
+                                  <div className="flex items-center space-x-1 max-w-xs">
+                                    <FileText className="w-3 h-3" />
+                                    <span className="truncate">{transaction.description}</span>
+                                  </div>
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      
-                      <div className="text-right">
-                        <p className={`font-bold text-lg ${
-                          transaction.type === 'income' 
-                            ? 'text-green-400' 
-                            : 'text-red-400'
-                        }`}>
-                          {transaction.type === 'income' ? '+' : '-'}₹{transaction.amount.toLocaleString()}
-                        </p>
+                        
+                        <div className="text-right flex-shrink-0 ml-4">
+                          <p className={`font-bold text-lg ${
+                            transaction.type === 'income' 
+                              ? 'text-green-400' 
+                              : 'text-red-400'
+                          }`}>
+                            {transaction.type === 'income' ? '+' : '-'}₹{transaction.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
+                  ))}
+                  
+                  {/* Lazy loading sentinel and loading indicator */}
+                  {hasMoreTransactions && (
+                    <div 
+                      ref={observerTarget} 
+                      className="py-8 min-h-[100px] flex items-center justify-center"
+                    >
+                      <div className="flex flex-col items-center justify-center space-y-3">
+                        <Loader2 className="w-6 h-6 animate-spin text-green-400" />
+                        <span className="text-sm text-gray-400">
+                          {isLoadingMore ? 'Loading more transactions...' : 'Scroll for more transactions...'}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="p-12 text-center">
                   <div className="w-16 h-16 bg-gray-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -610,15 +1105,6 @@ function App() {
             </div>
           </div>
 
-          {/* Logout Button */}
-          <div className="mt-8 text-center">
-            <button
-              onClick={() => setCurrentStep('login')}
-              className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl shadow-red-500/25"
-            >
-              Sign Out
-            </button>
-          </div>
         </div>
       </div>
     </div>

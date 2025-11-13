@@ -32,34 +32,74 @@ class TransactionSerializer(serializers.ModelSerializer):
         return data
 
 
-class RegisterUserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-    password_confirm = serializers.CharField(write_only=True)
+class RegisterUserSerializer(serializers.Serializer):
+    """Serializer for user registration with bank account details"""
+    name = serializers.CharField(required=True, max_length=100, help_text="Full name of the user")
+    email = serializers.EmailField(required=True, help_text="Email address (must be unique)")
+    password = serializers.CharField(required=True, write_only=True, min_length=8, help_text="Password (minimum 8 characters)")
+    confirm_password = serializers.CharField(required=True, write_only=True, help_text="Password confirmation")
+    account_number = serializers.CharField(required=True, max_length=20, help_text="Bank account number")
+    ifsc_code = serializers.CharField(required=True, max_length=15, help_text="IFSC code")
     
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password', 'password_confirm', 'first_name', 'last_name']
+    def validate_email(self, value):
+        """Validate that email is unique"""
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("A user with this email already exists.")
+        return value
+    
+    def validate_password(self, value):
+        """Validate password meets minimum length requirement"""
+        if len(value) < 8:
+            raise serializers.ValidationError("Password must be at least 8 characters long.")
+        return value
     
     def validate(self, data):
-        if data['password'] != data['password_confirm']:
-            raise serializers.ValidationError("Passwords don't match")
+        """Validate that passwords match"""
+        password = data.get('password')
+        confirm_password = data.get('confirm_password')
+        
+        if password and confirm_password:
+            if password != confirm_password:
+                raise serializers.ValidationError("Passwords do not match")
+        
         return data
     
-    # def create(self, validated_data):
-    #     validated_data.pop('password_confirm')
-    #     user = User.objects.create_user(**validated_data)
-    #     return user 
     def create(self, validated_data):
-        validated_data.pop('password_confirm')
+        """Create user and bank account"""
+        name = validated_data.pop('name')
+        email = validated_data.pop('email')
         password = validated_data.pop('password')
-        username = validated_data.pop('username')
+        confirm_password = validated_data.pop('confirm_password')  # Already validated
+        account_number = validated_data.pop('account_number')
+        ifsc_code = validated_data.pop('ifsc_code')
         
-        user = User.objects.create_user(username=username, password=password)
+        # Generate username from email (take part before @)
+        username_base = email.split('@')[0]
+        username = username_base
+        counter = 1
         
-        # Optional fields (only if provided)
-        user.email = validated_data.get('email', '')
-        user.first_name = validated_data.get('first_name', '')
-        user.last_name = validated_data.get('last_name', '')
+        # Ensure username is unique
+        while User.objects.filter(username=username).exists():
+            username = f"{username_base}_{counter}"
+            counter += 1
         
-        user.save()
+        # Create user
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            first_name=name
+        )
+        
+        # Create bank account linked to user
+        from .models import BankAccount
+        BankAccount.objects.create(
+            user=user,
+            name=name,
+            email=email,
+            account_number=account_number,
+            ifsc_code=ifsc_code,
+            password=''  # Bank account password not stored for security
+        )
+        
         return user

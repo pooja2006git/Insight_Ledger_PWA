@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from .utils import encrypt_data, decrypt_data
 
+from django.db import models
+
 
 class Transaction(models.Model):
     TRANSACTION_TYPES = [
@@ -54,3 +56,16 @@ class Transaction(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.title} - ${self.amount}" 
+
+
+
+class BankAccount(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bank_accounts', null=True, blank=True)
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    account_number = models.CharField(max_length=20)
+    ifsc_code = models.CharField(max_length=15)
+    password = models.CharField(max_length=50, blank=True)  # Not storing bank password for security
+
+    def __str__(self):
+        return f"{self.name} - {self.account_number}"
