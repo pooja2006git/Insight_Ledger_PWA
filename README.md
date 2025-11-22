@@ -4,7 +4,7 @@
 
 
 ## 🌐 Deployment Link  
-🔗 [https://insight-ledger-pwa.vercel.app/]
+🔗 https://insight-ledger-pwa.vercel.app/
 
 ---
 
